@@ -1,9 +1,10 @@
 package com.scienjus.smartqq;
 
+import com.scienjus.smartqq.callback.MessageCallback;
 import com.scienjus.smartqq.client.SmartQQClient;
-import com.scienjus.smartqq.model.Group;
-
-import java.util.List;
+import com.scienjus.smartqq.model.DiscussMessage;
+import com.scienjus.smartqq.model.GroupMessage;
+import com.scienjus.smartqq.model.Message;
 
 /**
  * @author XieEnlong
@@ -11,12 +12,26 @@ import java.util.List;
  */
 public class Application {
 
-    public static void main(String[] args) {
-        SmartQQClient client = new SmartQQClient();
-        client.login();
-        List<Group> groups = client.getGroupList();
-        for (Group group : groups) {
-            System.out.println("name: " + group.getName());
-        }
-    }
+	public static void main(String[] args) {
+		SmartQQClient client = new SmartQQClient();
+//		SmartQQAction client = new SmartQQAction();
+		client.login();
+		client.getGroupList();
+		client.pollMessage(new MessageCallback() {
+			@Override
+			public void onMessage(Message message) {
+				System.out.println(message);
+			}
+
+			@Override
+			public void onGroupMessage(GroupMessage message) {
+				System.out.println(message);
+			}
+
+			@Override
+			public void onDiscussMessage(DiscussMessage message) {
+				System.out.println(message);
+			}
+		});
+	}
 }
